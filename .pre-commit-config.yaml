@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: prettier
+        name: format javascript files
+        language: system
+        entry: npx prettier --write
+        files: ^.*\.(js|jsx)$
+      - id: eslint
+        name: lint javascript files
+        language: system
+        entry: npx eslint --fix
+        files: ^.*\.(js|jsx)$
+      - id: gofmt
+        name: format golang files
+        language: system
+        entry: gofmt -s -w
+        files: ^.*\.go$
+      - id: golangci
+        name: lint golang files
+        language: system
+        entry: golangci-lint run
+        files: ^.*\.go$
