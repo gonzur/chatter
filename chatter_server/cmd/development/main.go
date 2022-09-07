@@ -14,5 +14,5 @@ func main() {
 		return
 	}
 	room := chatrooms.Room{}
-	room.Init()
+	room.Init("")
 }

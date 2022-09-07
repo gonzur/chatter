@@ -1,7 +1,6 @@
 linters:
   enable:
     - revive
-    - goimports
     - goconst
     - nonamedreturns
     - unparam
