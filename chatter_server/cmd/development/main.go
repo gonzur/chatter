@@ -1,7 +1,6 @@
 package main
 
 import (
-	"chatter-server/internal/chatrooms"
 	"chatter-server/internal/routes"
 
 	"github.com/gin-gonic/gin"
@@ -10,9 +9,8 @@ import (
 func main() {
 	serv := gin.Default()
 	routes.BuildRoutes(serv)
-	if serv.Run() != nil {
-		return
+
+	if err := serv.Run(); err != nil {
+		println(err.Error())
 	}
-	room := chatrooms.Room{}
-	room.Init("")
 }

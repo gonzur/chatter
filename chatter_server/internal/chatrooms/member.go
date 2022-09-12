@@ -14,10 +14,11 @@ type Member struct {
 	send chan Message
 }
 
-func (m *Member) Init(room *Room, conn *websocket.Conn) {
+func (m *Member) Init(userID string, room *Room, conn *websocket.Conn) {
 	m.conn = conn
 	m.send = make(chan Message)
 	m.room = room
+	m.ID = userID
 	m.room.join <- m
 	go m.OpenReciever()
 	go m.OpenSender()
@@ -41,9 +42,11 @@ func (m *Member) OpenReciever() {
 
 	for {
 		messageType, message, err := m.conn.ReadMessage()
+
 		if messageType == websocket.CloseMessage {
 			return
 		}
+
 		if err != nil {
 			return
 		}
@@ -72,13 +75,16 @@ func (m *Member) OpenSender() {
 				}
 				return
 			}
+
 			if m.conn.WriteMessage(websocket.TextMessage, message.Data) != nil {
 				return
 			}
+
 		case <-pingTick.C:
 			if m.conn.SetWriteDeadline(time.Now().Add(sockconst.WriteWait)) != nil {
 				return
 			}
+
 			if m.conn.WriteMessage(websocket.PingMessage, nil) != nil {
 				return
 			}

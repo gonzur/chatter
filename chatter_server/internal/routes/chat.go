@@ -1,15 +1,36 @@
 package routes
 
 import (
+	"chatter-server/internal/chatrooms"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
-func chatRoutes(router *gin.RouterGroup) {
+func joinRoom(router *gin.RouterGroup) {
+	chatrooms.Init()
+	setup := func(c *gin.Context) {
+
+		conn, err := chatrooms.Upgrade(c.Writer, c.Request)
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		if err = chatrooms.Create(""); err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		if err = chatrooms.Join("", "", conn); err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+	}
+
 	chatRouter := router.Group("/chat")
-	chatRouter.GET("/message")
+	chatRouter.GET("/joinRoom", setup)
 }
 
 func BuildRoutes(router *gin.Engine) {
 	apiRouter := router.Group("/api")
-	chatRoutes(apiRouter)
+	joinRoom(apiRouter)
 }

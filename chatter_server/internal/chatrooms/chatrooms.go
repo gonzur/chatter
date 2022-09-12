@@ -2,6 +2,7 @@ package chatrooms
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/gorilla/websocket"
 )
@@ -17,6 +18,12 @@ func makeEmptyRooms() rooms {
 
 var activeRooms rooms
 
+var socketUpgrade = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	CheckOrigin:     func(r *http.Request) bool { return true },
+}
+
 func Create(name string) error {
 	if _, ok := activeRooms.registeredRooms[name]; ok {
 		return errors.New("exists")
@@ -28,19 +35,18 @@ func Create(name string) error {
 
 }
 
-func Join(name string, conn *websocket.Conn) error {
-	if room, ok := activeRooms.registeredRooms[name]; ok {
+func Join(roomID string, userID string, conn *websocket.Conn) error {
+	if room, ok := activeRooms.registeredRooms[roomID]; ok {
 		mem := new(Member)
-		mem.Init(room, conn)
+		mem.Init(userID, room, conn)
 		return nil
 	}
 	return errors.New("does not exist")
 
 }
 
-// TODO: upgrade passed connection to websocket connection and join room
-func Upgrade() {
-
+func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
+	return socketUpgrade.Upgrade(w, r, nil)
 }
 
 func Init() {
