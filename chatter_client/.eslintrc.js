@@ -14,6 +14,13 @@ module.exports = {
   },
   plugins: ["react", "jest"],
   rules: {
+    "react/function-component-definition": [
+      1,
+      {
+        namedComponents: "arrow-function",
+      },
+    ],
+    "react/prop-types": [0],
     "react/jsx-filename-extension": [1, { extensions: [".js", ".jsx"] }],
     "react/react-in-jsx-scope": "off",
   },
