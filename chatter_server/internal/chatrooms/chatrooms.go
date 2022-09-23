@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
 
@@ -24,15 +25,13 @@ var socketUpgrade = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-func Create(name string) error {
+func createIfNotExist(name string) {
 	if _, ok := activeRooms.registeredRooms[name]; ok {
-		return errors.New("exists")
+		return
 	}
 	room := new(Room)
 	room.Init(name)
 	activeRooms.registeredRooms[name] = room
-	return nil
-
 }
 
 func Join(roomID string, userID string, conn *websocket.Conn) error {
@@ -45,7 +44,32 @@ func Join(roomID string, userID string, conn *websocket.Conn) error {
 
 }
 
-func Upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
+func GinRoute(c *gin.Context) {
+
+	// extract queries and turn into regular request response function
+	conn, err := upgrade(c.Writer, c.Request)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	var name string
+	var room string
+	if name, room = c.Query("userID"), c.Query("roomID"); name != "" && room != "" {
+
+		// error here
+		createIfNotExist(room)
+
+		if err = Join(room, name, conn); err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+			return
+		}
+	} else {
+		c.AbortWithStatus(http.StatusBadRequest)
+	}
+}
+
+func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	return socketUpgrade.Upgrade(w, r, nil)
 }
 
