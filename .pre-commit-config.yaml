@@ -19,5 +19,5 @@ repos:
       - id: golangci
         name: lint golang files
         language: system
-        entry: golangci-lint run
-        files: ^.*\.go$
+        entry: make lint
+        pass_filenames: false
