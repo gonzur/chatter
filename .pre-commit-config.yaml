@@ -5,12 +5,12 @@ repos:
         name: format javascript files
         language: system
         entry: npx prettier --write
-        files: ^.*\.(js|jsx)$
+        files: ^.*\.(js|jsx|ts|tsx|css)$
       - id: eslint
         name: lint javascript files
         language: system
         entry: npx eslint --fix
-        files: ^.*\.(js|jsx)$
+        files: ^.*\.(js|jsx|ts|tsx)$
       - id: gofmt
         name: format golang files
         language: system
