@@ -1,0 +1,31 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  min-width: 64rem;
+  background-color: #f7f7f7;
+  border: 1px solid #e1e1e1;
+  border-radius: 5px;
+  box-shadow: inset 0px 0px 3px 1px #e1e1e1;
+  /* background: repeating-linear-gradient(#f7f7f760, #00000060 3px); */
+}
+
+.message {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.25rem;
+  padding: 0.25rem;
+}
+
+.text {
+  flex-basis: 80%;
+  padding-left: 1rem;
+  justify-content: left;
+}
+
+.status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-basis: 20%;
+}
