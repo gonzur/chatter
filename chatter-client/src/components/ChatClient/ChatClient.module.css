@@ -1,3 +1,9 @@
 .view {
   padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0px 0px 6px 3px #e1e1e1;
+}
+
+.chat-input {
+  margin: 1rem 0rem;
 }

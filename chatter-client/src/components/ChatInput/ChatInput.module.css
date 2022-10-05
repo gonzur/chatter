@@ -1,0 +1,20 @@
+.chat-line {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  height: 3rem;
+  margin-right: 1rem;
+}
+
+.btn-round {
+  display: block;
+  border-radius: 50%;
+  border: 1px solid #383838;
+  height: 3rem;
+  width: 3rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}

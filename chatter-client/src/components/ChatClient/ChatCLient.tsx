@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import ChatInput from "components/ChatInput";
 import HistoryView from "components/HistoryView";
 import { dummyMessageList } from "data/mock";
 import { useState } from "react";
@@ -8,9 +8,12 @@ const ChatCLient = () => {
   const [messages] = useState(dummyMessageList);
 
   return (
-    <Paper className={styles.view} elevation={3}>
-      <HistoryView messages={messages} />
-    </Paper>
+    <div className={styles.view}>
+      <HistoryView data-testid="oneday" messages={messages} />
+      <div className={styles["chat-input"]}>
+        <ChatInput onSubmit={() => {}} />
+      </div>
+    </div>
   );
 };
 

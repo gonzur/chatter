@@ -3,8 +3,8 @@
   flex-direction: column;
   min-width: 64rem;
   background-color: #f7f7f7;
-  border: 1px solid #e1e1e1;
-  border-radius: 5px;
+  border: 0px solid #e1e1e1;
+  border-radius: 4px;
   box-shadow: inset 0px 0px 3px 1px #e1e1e1;
   /* background: repeating-linear-gradient(#f7f7f760, #00000060 3px); */
 }
