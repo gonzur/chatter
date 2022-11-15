@@ -4,7 +4,7 @@ import style from "./App.module.css";
 
 const App = () => (
   <div className={style.center}>
-    <ChatCLient />
+    <ChatCLient userID="dummyUser" />
   </div>
 );
 
