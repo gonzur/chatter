@@ -54,7 +54,6 @@ func TestMessageSent(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	// TODO: figure out why message was never recieved
 	// recieve and decode message
 	_, recievedMessage, err := ws2.ReadMessage()
 	if err != nil {
