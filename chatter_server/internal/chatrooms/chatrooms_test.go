@@ -37,7 +37,7 @@ func TestMessageSent(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 	defer ws.Close()
-	
+
 	ws2, _, err := websocket.DefaultDialer.Dial(u+"/test?userID=test2&roomID=test", nil)
 	if err != nil {
 		t.Fatal(err.Error())
