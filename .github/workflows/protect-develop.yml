@@ -1,7 +1,8 @@
 name: protect-develop
 on:
   pull_request:
-    branches: [$development-branch]
+    branches:
+      - develop
 jobs:
   # Lints the golang server for the chat service
   lint-server:
@@ -49,3 +50,9 @@ jobs:
 
       - name: Lint for Code Smells
         run: npx eslint . --ext .tsx --ext .ts --ext .jsx --ext .js
+
+      - name: Check for compile errors
+        run: npm run build
+
+      - name: Run Tests for the Client
+        run: CI=true npm run test
