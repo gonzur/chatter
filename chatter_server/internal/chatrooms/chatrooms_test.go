@@ -36,8 +36,8 @@ func TestMessageSent(t *testing.T) {
 	if err != nil {
 		t.Fatal(err.Error())
 	}
-	println("fail")
 	defer ws.Close()
+
 	ws2, _, err := websocket.DefaultDialer.Dial(u+"/test?userID=test2&roomID=test", nil)
 	if err != nil {
 		t.Fatal(err.Error())
@@ -54,7 +54,6 @@ func TestMessageSent(t *testing.T) {
 		t.Fatal(err.Error())
 	}
 
-	// TODO: figure out why message was never recieved
 	// recieve and decode message
 	_, recievedMessage, err := ws2.ReadMessage()
 	if err != nil {
