@@ -47,10 +47,10 @@ jobs:
         run: npm i
 
       - name: Check for Consistent Style
-        run: npx prettier --check .
+        run: npx prettier --check ./src
 
       - name: Lint for Code Smells
-        run: npx eslint . --ext .tsx --ext .ts --ext .jsx --ext .js
+        run: npx eslint ./src --ext .tsx --ext .ts --ext .jsx --ext .js
 
       - name: Check for compile errors
         run: npm run build
