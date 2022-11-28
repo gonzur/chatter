@@ -6,7 +6,7 @@ on:
 jobs:
   # Lints the golang server for the chat service
   lint-server:
-    name: Lint server
+    name: Lint Server
     runs-on: ubuntu-latest
 
     steps:
