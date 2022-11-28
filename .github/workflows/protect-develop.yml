@@ -20,7 +20,8 @@ jobs:
 
       - name: Lint for Code Smells
         uses: golangci/golangci-lint-action@v3
-        working-directory: ./chatter_server
+        with:
+          working-directory: ./chatter_server
 
       - name: Check if the Server Compiles
         run: go build
