@@ -14,7 +14,7 @@ const ChatCLient = ({ userID }: ChatCLientProps) => {
 
   return (
     <div className={styles.view}>
-      <HistoryView data-testid="oneday" messages={messages} />
+      <HistoryView messages={messages} />
       <div className={styles["chat-input"]}>
         <ChatInput
           onSubmit={(data) => {

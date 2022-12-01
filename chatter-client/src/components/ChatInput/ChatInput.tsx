@@ -19,7 +19,6 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
 
       <button
         className={styles["btn-round"]}
-        data-testid=""
         onClick={() => onSubmit(text)}
         type="button"
       >

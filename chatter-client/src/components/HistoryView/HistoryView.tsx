@@ -11,13 +11,16 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
     <div className={styles.view}>
       {messages
         .slice(min, messages.length)
-        .map(({ sender, message, sentOn }) => (
-          <div className={styles.message}>
+        .map(({ sender, message, sentOn }, index) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={index} className={styles.message}>
             <div className={styles.status}>
               <div>{sentOn}</div>
-              <div>{sender}:</div>
+              <div data-testid="chatUser">{sender}:</div>
             </div>
-            <div className={styles.text}>&quot;{message}&quot;</div>
+            <div data-testid="chatMessage" className={styles.text}>
+              &quot;{message}&quot;
+            </div>
           </div>
         ))}
     </div>

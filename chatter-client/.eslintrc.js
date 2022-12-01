@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint", "jest"],
   rules: {
+    "no-restricted-syntax": [0],
     "import/extensions": [
       "error",
       "ignorePackages",
