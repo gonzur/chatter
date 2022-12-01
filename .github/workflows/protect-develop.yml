@@ -1,0 +1,59 @@
+name: protect-develop
+on:
+  pull_request:
+    branches:
+      - develop
+jobs:
+  # Lints the golang server for the chat service
+  lint-server:
+    name: Lint Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Lint for Code Smells
+        uses: golangci/golangci-lint-action@v3
+        with:
+          working-directory: ./chatter_server
+
+      - name: Check if the Server Compiles
+        run: go build
+        working-directory: ./chatter_server/cmd/development
+
+      - name: Run Tests for the Server
+        run: go test ./...
+        working-directory: ./chatter_server
+
+  # Lint the React client for the chat service
+  lint-client:
+    name: Lint Client
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chatter-client
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install npm devDependencies
+        run: npm i
+
+      - name: Check for Consistent Style
+        run: npx prettier --check ./src
+
+      - name: Lint for Code Smells
+        run: npx eslint ./src --ext .tsx --ext .ts --ext .jsx --ext .js
+
+      - name: Check for compile errors
+        run: npm run build
+
+      - name: Run Tests for the Client
+        run: CI=true npm run test
