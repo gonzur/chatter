@@ -1,4 +1,4 @@
-const useTwelveHourDate = (date: Date) => {
+const formatToTwelveHourDate = (date: Date) => {
   const meridian = date.getHours() >= 12 ? "pm" : "am";
 
   let minute = date.getMinutes().toString();
@@ -13,4 +13,4 @@ const useTwelveHourDate = (date: Date) => {
   return { formattedDate: `${hour}:${minute} ${meridian}` };
 };
 
-export default useTwelveHourDate;
+export default formatToTwelveHourDate;

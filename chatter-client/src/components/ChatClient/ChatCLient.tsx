@@ -1,7 +1,8 @@
 import ChatInput from "components/ChatInput";
 import HistoryView from "components/HistoryView";
 import { Message } from "data/types";
-import useTwelveHourDate from "hooks/useTwelveHourDate";
+import { formatToTwelveHourDate } from "helpers/format";
+
 import { useState } from "react";
 import styles from "./ChatClient.module.css";
 
@@ -18,7 +19,7 @@ const ChatCLient = ({ userID }: ChatCLientProps) => {
       <div className={styles["chat-input"]}>
         <ChatInput
           onSubmit={(data) => {
-            const { formattedDate } = useTwelveHourDate(new Date());
+            const { formattedDate } = formatToTwelveHourDate(new Date());
             const message: Message = {
               sender: userID,
               message: data,
