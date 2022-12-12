@@ -10,7 +10,7 @@ const formatToTwelveHourDate = (date: Date) => {
       : date.getHours().toString();
   if (hour === "0") hour = "12";
 
-  return { formattedDate: `${hour}:${minute} ${meridian}` };
+  return `${hour}:${minute} ${meridian}`;
 };
 
 export default formatToTwelveHourDate;

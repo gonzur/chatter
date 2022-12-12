@@ -10,7 +10,7 @@ func main() {
 	serv := gin.Default()
 	routes.BuildRoutes(serv)
 
-	if err := serv.Run(); err != nil {
+	if err := serv.Run(":8080"); err != nil {
 		println(err.Error())
 	}
 }

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import ChatCLient from "./ChatCLient";
 
 test("accepts a message", () => {
-  render(<ChatCLient userID="test" />);
+  render(<ChatCLient username="test" roomID="test" />);
 
   const messages = [
     "hello",
@@ -38,7 +38,7 @@ test("displays user next to message", () => {
   ];
 
   userIDs.forEach((id) => {
-    render(<ChatCLient userID={id} />);
+    render(<ChatCLient username={id} roomID={id} />);
 
     const inputBox = screen.getByRole("textbox");
     const enter = screen.getByRole("button");

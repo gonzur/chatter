@@ -11,7 +11,7 @@ func joinRoom(router *gin.RouterGroup) {
 	roomSetup := chatrooms.GinRoute
 
 	chatRouter := router.Group("/chat")
-	chatRouter.GET("/joinRoom", roomSetup)
+	chatRouter.GET("/join-room", roomSetup)
 }
 
 func BuildRoutes(router *gin.Engine) {
