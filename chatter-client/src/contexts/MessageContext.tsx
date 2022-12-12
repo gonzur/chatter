@@ -4,6 +4,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -53,9 +54,13 @@ const MessageContextProvider = ({
     }
   }, [socket]);
 
-  <MessageContext.Provider value={{ messages }}>
-    {children}
-  </MessageContext.Provider>;
+  const contextValue = useMemo(() => ({ messages }), [messages]);
+
+  return (
+    <MessageContext.Provider value={contextValue}>
+      {children}
+    </MessageContext.Provider>
+  );
 };
 
 const useMessageContext = () => useContext(MessageContext);
