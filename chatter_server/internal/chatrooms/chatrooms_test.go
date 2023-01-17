@@ -15,7 +15,6 @@ import (
 var testEngine *gin.Engine
 
 func preflight() {
-	Init()
 	gin.SetMode(gin.TestMode)
 	testEngine = gin.Default()
 	testEngine.GET("/test", GinRoute)

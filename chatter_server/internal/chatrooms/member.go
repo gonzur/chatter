@@ -1,7 +1,6 @@
 package chatrooms
 
 import (
-	"chatter-server/internal/chatrooms/sockconst"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -14,7 +13,7 @@ type Member struct {
 	send chan Message
 }
 
-func (m *Member) Init(userID string, room *Room, conn *websocket.Conn) {
+func (m *Member) JoinRoom(userID string, room *Room, conn *websocket.Conn) {
 	m.conn = conn
 	m.send = make(chan Message)
 	m.room = room
@@ -30,13 +29,13 @@ func (m *Member) OpenReciever() {
 		m.room.leave <- m
 	}()
 
-	m.conn.SetReadLimit(sockconst.ReadLimit)
-	if m.conn.SetReadDeadline(time.Now().Add(sockconst.PongTime)) != nil {
+	m.conn.SetReadLimit(readLimit)
+	if m.conn.SetReadDeadline(time.Now().Add(pongTime)) != nil {
 		return
 	}
 
 	m.conn.SetPongHandler(func(string) error {
-		return m.conn.SetReadDeadline(time.Now().Add(sockconst.PongTime))
+		return m.conn.SetReadDeadline(time.Now().Add(pongTime))
 
 	})
 
@@ -57,7 +56,7 @@ func (m *Member) OpenReciever() {
 }
 
 func (m *Member) OpenSender() {
-	pingTick := time.NewTicker(sockconst.PingTime)
+	pingTick := time.NewTicker(pingTime)
 	defer func() {
 		pingTick.Stop()
 		m.conn.Close()
@@ -65,7 +64,7 @@ func (m *Member) OpenSender() {
 	for {
 		select {
 		case message, ok := <-m.send:
-			if m.conn.SetWriteDeadline(time.Now().Add(sockconst.WriteWait)) != nil {
+			if m.conn.SetWriteDeadline(time.Now().Add(writeWait)) != nil {
 				return
 			}
 			// TODO: log errors
@@ -81,7 +80,7 @@ func (m *Member) OpenSender() {
 			}
 
 		case <-pingTick.C:
-			if m.conn.SetWriteDeadline(time.Now().Add(sockconst.WriteWait)) != nil {
+			if m.conn.SetWriteDeadline(time.Now().Add(writeWait)) != nil {
 				return
 			}
 

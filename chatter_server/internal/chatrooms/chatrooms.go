@@ -17,7 +17,7 @@ func makeEmptyRooms() rooms {
 
 }
 
-var activeRooms rooms
+var activeRooms rooms = makeEmptyRooms()
 
 var socketUpgrade = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -30,14 +30,14 @@ func createIfNotExist(name string) {
 		return
 	}
 	room := new(Room)
-	room.Init(name)
+	room.OpenChatRoom(name)
 	activeRooms.registeredRooms[name] = room
 }
 
 func Join(roomID string, userID string, conn *websocket.Conn) error {
 	if room, ok := activeRooms.registeredRooms[roomID]; ok {
 		mem := new(Member)
-		mem.Init(userID, room, conn)
+		mem.JoinRoom(userID, room, conn)
 		return nil
 	}
 	return errors.New("does not exist")
@@ -71,8 +71,4 @@ func GinRoute(c *gin.Context) {
 
 func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	return socketUpgrade.Upgrade(w, r, nil)
-}
-
-func Init() {
-	activeRooms = makeEmptyRooms()
 }

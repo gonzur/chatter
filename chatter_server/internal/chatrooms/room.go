@@ -9,7 +9,7 @@ type Room struct {
 	cast    chan Message
 }
 
-func (r *Room) Init(roomName string) {
+func (r *Room) OpenChatRoom(roomName string) {
 	r.name = roomName
 	r.members = make(map[*Member]bool)
 	r.join = make(chan *Member)
