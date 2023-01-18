@@ -12,7 +12,6 @@ func main() {
 	apiRouter := serv.Group("/api")
 	chatrooms.AttachRoutes(apiRouter)
 
-
 	if err := serv.Run(":8080"); err != nil {
 		println(err.Error())
 	}
