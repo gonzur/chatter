@@ -1,5 +1,5 @@
 # Linter recipes
-lint-serv:
+lint-server:
 	cd chatter_server;\
 	gofmt -s -w .&&\
 	golangci-lint run
@@ -8,11 +8,11 @@ lint-client:
 	cd chatter-client;\
 	npm run lint
 
-lint-all: lint-serv lint-client
+lint-all: lint-server lint-client
 #
 
 # Development recipes
-run-serv-dev:
+run-server-dev:
 	cd chatter_server/cmd/development;\
 	go run ./main.go
 

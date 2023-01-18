@@ -23,8 +23,7 @@ These need to be installed prior to setup.
 
 ## Setup
 
-- Install chatter client dependencies with `npm i`
-- Install pre-commit hooks by running `pip install pre-commit && pre-commit install`
+- Run the `make setup` command. If you encountered an error see the dependencies list.
 
 ## Technologies Used
 
