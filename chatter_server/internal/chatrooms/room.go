@@ -1,5 +1,7 @@
 package chatrooms
 
+import "log"
+
 type Room struct {
 	name string
 	// should eventually hold a set of permissions not bool
@@ -19,6 +21,10 @@ func (r *Room) OpenChatRoom(roomName string) {
 }
 
 func (r *Room) Run() {
+	defer func() {
+		err := recover()
+		log.Println(err)
+	}()
 	for {
 		select {
 		case member := <-r.join:
@@ -26,7 +32,11 @@ func (r *Room) Run() {
 
 		case member := <-r.leave:
 			goodbye := makeMessage("", "Goodbye")
-			r.cast <- goodbye
+			for m := range r.members {
+				if m.ID != goodbye.Sender {
+					m.send <- goodbye
+				}
+			}
 			delete(r.members, member)
 
 		case message := <-r.cast:

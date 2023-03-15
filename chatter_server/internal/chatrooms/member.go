@@ -1,6 +1,7 @@
 package chatrooms
 
 import (
+	"log"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -30,28 +31,25 @@ func (m *Member) OpenReciever() {
 	}()
 
 	m.conn.SetReadLimit(readLimit)
-	if m.conn.SetReadDeadline(time.Now().Add(pongTime)) != nil {
+	if m.conn.SetReadDeadline(time.Now().Add(readWait)) != nil {
 		return
 	}
 
 	m.conn.SetPongHandler(func(string) error {
 		return m.conn.SetReadDeadline(time.Now().Add(pongTime))
-
 	})
 
 	for {
-		messageType, message, err := m.conn.ReadMessage()
+		readyMessage := &Message{}
 
-		if messageType == websocket.CloseMessage {
-			return
-		}
+		err := m.conn.ReadJSON(readyMessage)
 
 		if err != nil {
+			log.Println(err.Error())
 			return
 		}
 
-		readyMessage := makeMessage(m.ID, string(message))
-		m.room.cast <- readyMessage
+		m.room.cast <- *readyMessage
 	}
 }
 
@@ -67,6 +65,7 @@ func (m *Member) OpenSender() {
 			if m.conn.SetWriteDeadline(time.Now().Add(writeWait)) != nil {
 				return
 			}
+
 			// TODO: log errors
 			if !ok {
 				if m.conn.WriteMessage(websocket.CloseMessage, nil) != nil {
@@ -75,7 +74,8 @@ func (m *Member) OpenSender() {
 				return
 			}
 
-			if m.conn.WriteMessage(websocket.TextMessage, message.Data) != nil {
+			if err := m.conn.WriteJSON(message); err != nil {
+				log.Println(err.Error())
 				return
 			}
 

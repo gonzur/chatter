@@ -1,17 +1,22 @@
 package chatrooms
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Message struct {
-	Sender string
-	Data   []byte
+	Sender  string `json:"sender"`
+	Message string `json:"message"`
+	SentOn  string `json:"sentOn"`
 }
 
 func makeMessage(id string, value string) Message {
 	message := Message{}
 
 	message.Sender = id
-	message.Data = []byte(value)
+	message.Message = value
+	message.SentOn = time.Now().Format(time.RFC1123)
 
 	return message
 }

@@ -21,7 +21,7 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
 
   const sendMessage = (message: Message) => {
     if (connected) {
-      socket?.send(message.toString());
+      socket?.send(JSON.stringify(message));
     }
 
     setMessages([...messages, message]);
@@ -45,7 +45,7 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
 
   useEffect(() => {
     if (socket !== null) {
-      socket.addEventListener("open", () => {
+      socket.onopen = () => {
         setConnected(true);
         const message: Message = {
           sender: username,
@@ -53,14 +53,14 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
           message: `New user "${username}" has joined. Say hello everyone!`,
         };
         sendMessage(message);
-      });
+      };
 
-      socket.addEventListener("message", (event) => {
-        const message = event.data as Message;
+      socket.onmessage = (event) => {
+        const message = JSON.parse(event.data) as Message;
         setMessages([...messages, message]);
-      });
+      };
     }
-  }, [socket]);
+  }, [socket, messages]);
 
   return (
     <div className={styles.view}>
