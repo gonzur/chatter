@@ -19,7 +19,7 @@ func convert12Hour(unFormTime time.Time) string {
 	}
 
 	if hour == 0 {
-		hour = 12;
+		hour = 12
 	}
 
 	meridian := "am"
