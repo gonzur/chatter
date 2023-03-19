@@ -31,7 +31,7 @@ func (m *Member) OpenReciever() {
 	}()
 
 	m.conn.SetReadLimit(readLimit)
-	if m.conn.SetReadDeadline(time.Now().Add(readWait)) != nil {
+	if m.conn.SetReadDeadline(time.Now().Add(pongTime)) != nil {
 		return
 	}
 

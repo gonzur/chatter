@@ -4,4 +4,8 @@ interface Message {
   message: string;
 }
 
-export default Message;
+interface MapRenderableMessage extends Message {
+  id: number;
+}
+
+export type { Message, MapRenderableMessage };

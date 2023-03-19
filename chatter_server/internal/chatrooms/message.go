@@ -2,6 +2,7 @@ package chatrooms
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -11,12 +12,30 @@ type Message struct {
 	SentOn  string `json:"sentOn"`
 }
 
-func makeMessage(id string, value string) Message {
+func convert12Hour(unFormTime time.Time) string {
+	hour := unFormTime.Hour()
+	if hour > 12 {
+		hour = hour - 12
+	}
+
+	if hour == 0 {
+		hour = 12;
+	}
+
+	meridian := "am"
+	if unFormTime.Hour() >= 12 {
+		meridian = "pm"
+	}
+
+	return fmt.Sprintf("%d:%02d %s", hour, unFormTime.Minute(), meridian)
+}
+
+func makeMessage(senderID string, text string) Message {
 	message := Message{}
 
-	message.Sender = id
-	message.Message = value
-	message.SentOn = time.Now().Format(time.RFC1123)
+	message.Sender = senderID
+	message.Message = text
+	message.SentOn = convert12Hour(time.Now())
 
 	return message
 }

@@ -1,6 +1,7 @@
 import ChatInput from "components/ChatInput";
 import HistoryView from "components/HistoryView";
 import { Message } from "data/types";
+import { MapRenderableMessage } from "data/types/Message";
 import { formatToTwelveHourDate } from "helpers/format";
 
 import { useEffect, useState } from "react";
@@ -17,14 +18,14 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
 
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MapRenderableMessage[]>([]);
 
   const sendMessage = (message: Message) => {
     if (connected) {
       socket?.send(JSON.stringify(message));
     }
 
-    setMessages([...messages, message]);
+    setMessages([...messages, { ...message, id: messages.length - 1 }]);
   };
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
 
       socket.onmessage = (event) => {
         const message = JSON.parse(event.data) as Message;
-        setMessages([...messages, message]);
+        setMessages([...messages, { ...message, id: messages.length - 1 }]);
       };
     }
   }, [socket, messages]);

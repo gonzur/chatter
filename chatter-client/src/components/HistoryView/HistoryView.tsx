@@ -1,8 +1,9 @@
-import { Message } from "data/types";
+import {} from "data/types";
+import { MapRenderableMessage } from "data/types/Message";
 import styles from "./HistoryView.module.css";
 
 interface HistoryViewProps {
-  messages: Message[];
+  messages: MapRenderableMessage[];
 }
 
 const HistoryView = ({ messages }: HistoryViewProps) => {
@@ -11,9 +12,9 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
     <div className={styles.view}>
       {messages
         .slice(min, messages.length)
-        .map(({ sender, message, sentOn }, index) => (
+        .map(({ sender, message, sentOn, id }) => (
           // eslint-disable-next-line react/no-array-index-key
-          <div key={index} className={styles.message}>
+          <div key={id} className={styles.message}>
             <div className={styles.status}>
               <div>{sentOn}</div>
               <div data-testid="chatUser">{sender}:</div>

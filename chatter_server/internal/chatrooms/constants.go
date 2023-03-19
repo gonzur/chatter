@@ -7,5 +7,4 @@ const (
 	pingTime  = 50 * time.Second
 	pongTime  = 60 * time.Second
 	writeWait = 10 * time.Second
-	readWait  = 10 * time.Second
 )
