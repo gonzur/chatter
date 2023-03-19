@@ -7,20 +7,30 @@ interface ChatInputProps {
 }
 
 const ChatInput = ({ onSubmit }: ChatInputProps) => {
-  const [text, setText] = useState("");
+  const [message, setMessage] = useState("");
+
+  const sendMessage = () => {
+    onSubmit(message);
+    setMessage("");
+  };
 
   return (
     <div className={styles.flex}>
       <input
         className={styles["chat-line"]}
-        onChange={(e) => setText(e.target.value)}
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        }}
         placeholder="Type to chat..."
       />
 
       <button
         className={styles["btn-round"]}
-        data-testid=""
-        onClick={() => onSubmit(text)}
+        onClick={() => sendMessage()}
         type="button"
       >
         <AiOutlineSend size="1.5rem" />

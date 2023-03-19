@@ -2,10 +2,13 @@ import { ChatCLient } from "components";
 import "./colors.css";
 import style from "./App.module.css";
 
-const App = () => (
-  <div className={style.center}>
-    <ChatCLient />
-  </div>
-);
+const App = () => {
+  const user = `dummyUser${new Date().getSeconds()}`;
+  return (
+    <div className={style.center}>
+      <ChatCLient username={user} roomID="test" />
+    </div>
+  );
+};
 
 export default App;

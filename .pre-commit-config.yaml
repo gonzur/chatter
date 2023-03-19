@@ -19,5 +19,5 @@ repos:
       - id: golangci
         name: lint golang files
         language: system
-        entry: make lint
+        entry: bash -c 'cd chatter_server; golangci-lint run'
         pass_filenames: false

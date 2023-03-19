@@ -1,7 +1,7 @@
 package chatrooms
 
 import (
-	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,10 +14,9 @@ type rooms struct {
 
 func makeEmptyRooms() rooms {
 	return rooms{registeredRooms: make(map[string]*Room)}
-
 }
 
-var activeRooms rooms
+var activeRooms = makeEmptyRooms()
 
 var socketUpgrade = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -25,23 +24,22 @@ var socketUpgrade = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-func createIfNotExist(name string) {
+func createAndRegisterRoom(name string) {
 	if _, ok := activeRooms.registeredRooms[name]; ok {
 		return
 	}
 	room := new(Room)
-	room.Init(name)
+	room.OpenChatRoom(name)
 	activeRooms.registeredRooms[name] = room
 }
 
 func Join(roomID string, userID string, conn *websocket.Conn) error {
 	if room, ok := activeRooms.registeredRooms[roomID]; ok {
 		mem := new(Member)
-		mem.Init(userID, room, conn)
+		mem.JoinRoom(userID, room, conn)
 		return nil
 	}
-	return errors.New("does not exist")
-
+	return fmt.Errorf("%s does not exist", roomID)
 }
 
 func GinRoute(c *gin.Context) {
@@ -56,14 +54,13 @@ func GinRoute(c *gin.Context) {
 	var name string
 	var room string
 	if name, room = c.Query("userID"), c.Query("roomID"); name != "" && room != "" {
-
-		// error here
-		createIfNotExist(room)
+		createAndRegisterRoom(room)
 
 		if err = Join(room, name, conn); err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			return
 		}
+
 	} else {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
@@ -71,8 +68,4 @@ func GinRoute(c *gin.Context) {
 
 func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	return socketUpgrade.Upgrade(w, r, nil)
-}
-
-func Init() {
-	activeRooms = makeEmptyRooms()
 }
