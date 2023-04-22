@@ -25,12 +25,7 @@ module.exports = {
         tsx: "never",
       },
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      { devDependencies: ["**/*.test.tsx", "**/*.spec.ts"] },
-      "error",
-      { devDependencies: true },
-    ],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
     "react/function-component-definition": [
