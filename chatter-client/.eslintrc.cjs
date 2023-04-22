@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    jest: true,
   },
   extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parser: "@typescript-eslint/parser",
@@ -13,7 +12,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint", "jest", "react-refresh"],
+  plugins: ["react", "@typescript-eslint", "react-refresh"],
   rules: {
     "no-restricted-syntax": [0],
     "import/extensions": [
