@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  ignorePatterns: ["node_modules/"],
+  ignorePatterns: ["node_modules/", ".eslintrc.js"],
   plugins: ["react", "@typescript-eslint", "jest"],
   rules: {
     "no-restricted-syntax": [0],
