@@ -13,7 +13,6 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
       {messages
         .slice(min, messages.length)
         .map(({ sender, message, sentOn, id }) => (
-          // eslint-disable-next-line react/no-array-index-key
           <div key={id} className={styles.message}>
             <div className={styles.status}>
               <div>{sentOn}</div>
