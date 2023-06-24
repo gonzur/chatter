@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import styles from "./ChatInput.module.css";
 
@@ -9,10 +9,10 @@ interface ChatInputProps {
 const ChatInput = ({ onSubmit }: ChatInputProps) => {
   const [message, setMessage] = useState("");
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     onSubmit(message);
     setMessage("");
-  };
+  }, [message]);
 
   return (
     <div className={styles.flex}>
