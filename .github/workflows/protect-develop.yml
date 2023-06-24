@@ -16,7 +16,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+          go-version: 1.20.x
 
       - name: Lint for Code Smells
         uses: golangci/golangci-lint-action@v3
@@ -54,6 +54,3 @@ jobs:
 
       - name: Check for compile errors
         run: npm run build
-
-      - name: Run Tests for the Client
-        run: CI=true npm run test

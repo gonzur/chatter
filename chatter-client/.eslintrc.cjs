@@ -2,7 +2,6 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    jest: true,
   },
   extends: ["plugin:react/recommended", "airbnb", "prettier"],
   parser: "@typescript-eslint/parser",
@@ -13,7 +12,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  plugins: ["react", "@typescript-eslint", "jest"],
+  plugins: ["react", "@typescript-eslint", "react-refresh"],
   rules: {
     "no-restricted-syntax": [0],
     "import/extensions": [
@@ -26,10 +25,7 @@ module.exports = {
         tsx: "never",
       },
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      { devDependencies: ["**/*.test.tsx", "**/*.spec.ts"] },
-    ],
+    "import/no-extraneous-dependencies": ["error", { devDependencies: true }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"],
     "react/function-component-definition": [

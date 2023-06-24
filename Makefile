@@ -18,7 +18,7 @@ run-server-dev:
 
 run-client-dev:
 	cd chatter-client;\
-	npm run start
+	npm run dev
 #
 
 # First run recipes
