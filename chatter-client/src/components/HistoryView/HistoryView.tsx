@@ -1,5 +1,5 @@
-import {} from "data/types";
 import { MapRenderableMessage } from "data/types/Message";
+import { useEffect, useRef } from "react";
 import styles from "./HistoryView.module.css";
 
 interface HistoryViewProps {
@@ -7,22 +7,26 @@ interface HistoryViewProps {
 }
 
 const HistoryView = ({ messages }: HistoryViewProps) => {
-  const min = messages.length - 10 < 0 ? 0 : messages.length - 10;
+  const endAnchor = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (endAnchor.current) {
+      endAnchor.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
   return (
     <div className={styles.view}>
-      {messages
-        .slice(min, messages.length)
-        .map(({ sender, message, sentOn, id }) => (
-          <div key={id} className={styles.message}>
-            <div className={styles.status}>
-              <div>{sentOn}</div>
-              <div data-testid="chatUser">{sender}:</div>
-            </div>
-            <div data-testid="chatMessage" className={styles.text}>
-              &quot;{message}&quot;
-            </div>
+      {messages.map(({ sender, message, sentOn, id }) => (
+        <div key={id} className={styles.message}>
+          <div className={styles.status}>
+            <div>{sentOn}</div>
+            <div data-testid="chatUser">{sender}:</div>
           </div>
-        ))}
+          <div data-testid="chatMessage" className={styles.text}>
+            &quot;{message}&quot;
+          </div>
+        </div>
+      ))}
+      <div ref={endAnchor} />
     </div>
   );
 };
