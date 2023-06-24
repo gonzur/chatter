@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import styles from "./ChatInput.module.css";
 
@@ -9,11 +9,6 @@ interface ChatInputProps {
 const ChatInput = ({ onSubmit }: ChatInputProps) => {
   const [message, setMessage] = useState("");
 
-  const sendMessage = useCallback(() => {
-    onSubmit(message);
-    setMessage("");
-  }, [message]);
-
   return (
     <div className={styles.flex}>
       <input
@@ -22,7 +17,8 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            sendMessage();
+            onSubmit(message);
+            setMessage("");
           }
         }}
         placeholder="Type to chat..."
@@ -30,7 +26,10 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
 
       <button
         className={styles["btn-round"]}
-        onClick={() => sendMessage()}
+        onClick={() => {
+          onSubmit(message);
+          setMessage("");
+        }}
         type="button"
       >
         <AiOutlineSend size="1.5rem" />
