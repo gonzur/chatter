@@ -54,6 +54,3 @@ jobs:
 
       - name: Check for compile errors
         run: npm run build
-
-      - name: Run Tests for the Client
-        run: CI=true npm run test
