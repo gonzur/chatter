@@ -18,7 +18,8 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
       {messages.map(({ sender, message, sentOn, id }) => (
         <div key={id} className={styles.message}>
           <div className={styles.status}>
-            <div>{sentOn}</div>
+            <div className={styles.sentOn}>{sentOn}</div>
+            <div style={{ width: ".5rem" }} />
             <div data-testid="chatUser">{sender}:</div>
           </div>
           <div data-testid="chatMessage" className={styles.text}>
