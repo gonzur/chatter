@@ -23,7 +23,6 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
         }}
         placeholder="Type to chat..."
       />
-
       <button
         className={styles["btn-round"]}
         onClick={() => {
@@ -31,6 +30,7 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
           setMessage("");
         }}
         type="button"
+        aria-label="Send"
       >
         <AiOutlineSend size="1.5rem" />
       </button>
