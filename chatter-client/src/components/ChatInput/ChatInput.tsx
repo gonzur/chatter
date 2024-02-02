@@ -16,7 +16,7 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && message !== "") {
             onSubmit(message);
             setMessage("");
           }
@@ -26,8 +26,10 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
       <button
         className={styles["btn-round"]}
         onClick={() => {
-          onSubmit(message);
-          setMessage("");
+          if (message !== "") {
+            onSubmit(message);
+            setMessage("");
+          }
         }}
         type="button"
         aria-label="Send"

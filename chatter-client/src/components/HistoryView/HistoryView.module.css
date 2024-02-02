@@ -8,27 +8,38 @@
   overflow-y: scroll;
   height: 22.5rem; /* equals 10 elements */
   box-shadow: inset 0px 0px 3px 1px #e1e1e1;
-  /* background: repeating-linear-gradient(#f7f7f760, #00000060 3px); */
 }
 
 .message {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: end;
+  max-width: 28rem;
 }
 
 .text {
-  flex-basis: 60%;
-  margin-left: 0.5rem;
-  justify-content: left;
+  margin: 0 0.5rem;
+  word-break: break-word;
+
+  padding: 0.25rem;
+
+  width: fit-content;
+
+  background-color: #4989eb;
+  color: #f7f7f7;
+
+  border: solid 1px #4989eb;
+  border-radius: 10px;
 }
 
 .status {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  flex-basis: 40%;
-  margin: 0rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  justify-content: end;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .sentOn {

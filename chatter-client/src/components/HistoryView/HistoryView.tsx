@@ -17,13 +17,15 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
     <div className={styles.view}>
       {messages.map(({ sender, message, sentOn, id }) => (
         <div key={id} className={styles.message}>
-          <div className={styles.status}>
-            <div className={styles.sentOn}>{sentOn}</div>
-            <div style={{ width: ".5rem" }} />
-            <div data-testid="chatUser">{sender}:</div>
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <div data-testid="chatMessage" className={styles.text}>
+              {message}
+            </div>
           </div>
-          <div data-testid="chatMessage" className={styles.text}>
-            &quot;{message}&quot;
+          <div className={styles.status}>
+            <div data-testid="chatUser">{sender}</div>
+            <div style={{ width: ".25rem" }} />
+            <div className={styles.sentOn}>{sentOn}</div>
           </div>
         </div>
       ))}
