@@ -4,7 +4,7 @@ import { Message } from "data/types";
 import { MapRenderableMessage } from "data/types/Message";
 import { formatToTwelveHourDate } from "helpers/format";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./ChatClient.module.css";
 
 interface ChatCLientProps {
@@ -20,16 +20,13 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
   const [connected, setConnected] = useState(false);
   const [messages, setMessages] = useState<MapRenderableMessage[]>([]);
 
-  const sendMessage = useCallback(
-    (message: Message) => {
-      if (connected) {
-        socket?.send(JSON.stringify(message));
-      }
+  const sendMessage = (message: Message) => {
+    if (connected) {
+      socket?.send(JSON.stringify(message));
+    }
 
-      setMessages([...messages, { ...message, id: messages.length - 1 }]);
-    },
-    [messages, socket, connected]
-  );
+    setMessages([...messages, { ...message, id: messages.length - 1 }]);
+  };
 
   useEffect(() => {
     try {
