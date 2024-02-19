@@ -40,16 +40,15 @@ func (m *Member) OpenReciever() {
 	})
 
 	for {
-		readyMessage := &Message{}
+		arrivingMessage := &Message{}
 
-		err := m.conn.ReadJSON(readyMessage)
-
+		err := m.conn.ReadJSON(arrivingMessage)
 		if err != nil {
 			log.Println(err.Error())
-			return
+			continue
 		}
 
-		m.room.cast <- *readyMessage
+		m.room.cast <- *arrivingMessage
 	}
 }
 
