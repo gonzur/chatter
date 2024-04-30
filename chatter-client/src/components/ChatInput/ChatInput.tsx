@@ -10,7 +10,7 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
   const [message, setMessage] = useState("");
 
   return (
-    <div className={styles.flex}>
+    <div className={styles.card}>
       <input
         className={styles["chat-line"]}
         value={message}
@@ -33,6 +33,7 @@ const ChatInput = ({ onSubmit }: ChatInputProps) => {
         }}
         type="button"
         aria-label="Send"
+        tabIndex={-1}
       >
         <AiOutlineSend size="1.5rem" />
       </button>

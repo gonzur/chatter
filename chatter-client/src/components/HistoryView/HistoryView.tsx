@@ -1,12 +1,14 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex */
 import { MapRenderableMessage } from "data/types/Message";
 import { useEffect, useRef } from "react";
 import styles from "./HistoryView.module.css";
 
 interface HistoryViewProps {
+  username: string;
   messages: MapRenderableMessage[];
 }
 
-const HistoryView = ({ messages }: HistoryViewProps) => {
+const HistoryView = ({ username, messages }: HistoryViewProps) => {
   const endAnchor = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (endAnchor.current) {
@@ -14,18 +16,29 @@ const HistoryView = ({ messages }: HistoryViewProps) => {
     }
   }, [messages]);
   return (
-    <div className={styles.view}>
+    <div className={styles.view} tabIndex={0}>
       {messages.map(({ sender, message, sentOn, id }) => (
         <div key={id} className={styles.message}>
-          <div style={{ display: "flex", justifyContent: "end" }}>
-            <div data-testid="chatMessage" className={styles.text}>
+          <div
+            style={{ justifyContent: username === sender ? "end" : "start" }}
+            className={styles.flex}
+          >
+            <p
+              data-testid="chatMessage"
+              className={`${styles.text} ${
+                username === sender ? styles.right : styles.left
+              }`}
+            >
               {message}
-            </div>
+            </p>
           </div>
-          <div className={styles.status}>
-            <div data-testid="chatUser">{sender}</div>
+          <div
+            style={{ justifyContent: username === sender ? "end" : "start" }}
+            className={styles.status}
+          >
+            <p data-testid="chatUser">{sender}</p>
             <div style={{ width: ".25rem" }} />
-            <div className={styles.sentOn}>{sentOn}</div>
+            <p className={styles.sentOn}>{sentOn}</p>
           </div>
         </div>
       ))}

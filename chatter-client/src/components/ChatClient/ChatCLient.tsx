@@ -65,7 +65,7 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
 
   return (
     <div className={styles.view}>
-      <HistoryView messages={messages} />
+      <HistoryView username={username} messages={messages} />
       <div className={styles["chat-input"]}>
         <ChatInput
           onSubmit={(data) => {
