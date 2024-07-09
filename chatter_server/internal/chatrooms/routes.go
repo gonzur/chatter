@@ -5,8 +5,8 @@ import (
 )
 
 func AttachRoutes(router *gin.RouterGroup) {
-	roomSetup := GinRoute
-
 	chatRouter := router.Group("/chat")
-	chatRouter.GET("/join-room", roomSetup)
+
+	chatRouter.GET("/join", RoomSetup)
+	chatRouter.GET("/list", ActiveRooms)
 }

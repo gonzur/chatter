@@ -42,7 +42,11 @@ func Join(roomID string, userID string, conn *websocket.Conn) error {
 	return fmt.Errorf("%s does not exist", roomID)
 }
 
-func GinRoute(c *gin.Context) {
+func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
+	return socketUpgrade.Upgrade(w, r, nil)
+}
+
+func RoomSetup(c *gin.Context) {
 
 	// extract queries and turn into regular request response function
 	conn, err := upgrade(c.Writer, c.Request)
@@ -66,6 +70,15 @@ func GinRoute(c *gin.Context) {
 	}
 }
 
-func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
-	return socketUpgrade.Upgrade(w, r, nil)
+func ActiveRooms(c *gin.Context) {
+	type nroom struct {
+		name        string
+		memberCount int
+	}
+	var roomacc []nroom
+	for _, room := range activeRooms.registeredRooms {
+		count := len(room.members)
+		roomacc = append(roomacc, nroom{name: room.name, memberCount: count})
+	}
+	c.JSON(200, roomacc)
 }

@@ -17,7 +17,7 @@ var testEngine *gin.Engine
 func preflight() {
 	gin.SetMode(gin.TestMode)
 	testEngine = gin.Default()
-	testEngine.GET("/test", GinRoute)
+	testEngine.GET("/test", RoomSetup)
 }
 
 func TestMain(m *testing.M) {
