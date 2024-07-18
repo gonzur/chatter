@@ -15,6 +15,7 @@ module.exports = {
   plugins: ["react", "@typescript-eslint", "react-refresh"],
   rules: {
     "no-restricted-syntax": [0],
+    "no-shadow": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

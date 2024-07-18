@@ -64,20 +64,22 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
   }, [socket, messages]);
 
   return (
-    <div className={styles.view}>
-      <HistoryView username={username} messages={messages} />
-      <div className={styles["chat-input"]}>
-        <ChatInput
-          onSubmit={(data) => {
-            const formattedDate = formatToTwelveHourDate(new Date());
-            const message: Message = {
-              sender: username,
-              message: data,
-              sentOn: formattedDate,
-            };
-            sendMessage(message);
-          }}
-        />
+    <div className={styles.alignment}>
+      <div className={styles.view}>
+        <HistoryView username={username} messages={messages} />
+        <div className={styles.chatInput}>
+          <ChatInput
+            onSubmit={(data) => {
+              const formattedDate = formatToTwelveHourDate(new Date());
+              const message: Message = {
+                sender: username,
+                message: data,
+                sentOn: formattedDate,
+              };
+              sendMessage(message);
+            }}
+          />
+        </div>
       </div>
     </div>
   );

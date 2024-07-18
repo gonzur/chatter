@@ -1,13 +1,13 @@
 .view {
   display: flex;
   flex-direction: column;
-  max-width: 30rem;
+  width: 100%;
   padding-top: 0.5rem;
   background-color: #f7f7f7;
   border: 0px solid #e1e1e1;
   border-radius: 4px;
   overflow-y: scroll;
-  height: 22.5rem; /* equals 7 elements */
+  height: 100%;
   box-shadow: inset 0px 0px 3px 1px #e1e1e1;
 }
 
@@ -28,7 +28,6 @@
 .message {
   display: flex;
   flex-direction: column;
-  max-width: 28rem;
 }
 
 .flex {
