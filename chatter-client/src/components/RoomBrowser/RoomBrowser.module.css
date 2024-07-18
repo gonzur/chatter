@@ -35,12 +35,23 @@
   background: transparent;
 }
 
+.roomListBorder {
+  box-shadow: inset 0px 0px 3px 1px #e1e1e1;
+  border-radius: 20px;
+  overflow-y: hidden;
+  height: 34rem;
+}
+
 .roomList {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   width: 30rem;
   gap: 2rem;
+  overflow-y: scroll;
+  padding: 1rem;
+  max-height: 32rem;
+  border-radius: 20px;
 }
 
 .card {
@@ -113,9 +124,11 @@
 .joinButton:hover {
   cursor: pointer;
   color: #0066ff;
-  background-color: transparent;
+  background-color: white;
 }
 
 .joinButton:active {
   color: #003f9e;
+  border-color: #003f9e;
+  background-color: white;
 }
