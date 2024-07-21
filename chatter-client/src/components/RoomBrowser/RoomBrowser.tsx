@@ -70,7 +70,7 @@ const RoomBrowser = (props: RoomBrowserProps) => {
               <button
                 className={styles.joinButton}
                 type="button"
-                onClick={() => transition(roomName)}
+                onClick={() => roomName && transition(roomName)}
               >
                 Create
               </button>
