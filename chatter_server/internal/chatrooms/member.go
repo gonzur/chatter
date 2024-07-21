@@ -40,7 +40,7 @@ func (m *Member) OpenReciever() {
 	})
 
 	for {
-		arrivingMessage := &Message{}
+		arrivingMessage := new(Message)
 
 		err := m.conn.ReadJSON(arrivingMessage)
 		if err != nil {
