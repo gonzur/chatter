@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { apiBaseUrl } from "data/constants";
 import styles from "./RoomBrowser.module.css";
 
 interface RoomInfo {
@@ -13,17 +14,9 @@ interface RoomBrowserProps {
 
 const RoomBrowser = (props: RoomBrowserProps) => {
   const { transition } = props;
-  const [roomList, setRoomList] = useState<RoomInfo[]>([
-    { name: "room 1asdfdsf", memberCount: 9 },
-    { name: "room 1", memberCount: 9 },
-    { name: "room 1asdfsafdas", memberCount: 9 },
-    { name: "room 2", memberCount: 9 },
-    { name: "room 3", memberCount: 9 },
-    { name: "1234567890123456", memberCount: 9 },
-    { name: "wwwwwwwwwwwwwwww", memberCount: 9 },
-  ]);
+  const [roomList, setRoomList] = useState<RoomInfo[]>([]);
   const fetchRooms = () => {
-    fetch("/api/chat/list")
+    fetch(`${apiBaseUrl}/chat/list`)
       .then((res) => res.json())
       .then((rooms: RoomInfo[]) => {
         setRoomList(rooms);
@@ -80,7 +73,13 @@ const RoomBrowser = (props: RoomBrowserProps) => {
             .filter((value) => value.name.includes(query))
             .map((room) => (
               <div id={room.name} className={styles.card}>
-                <span className={styles.active}>Active</span>
+                <span
+                  className={
+                    room.memberCount > 0 ? styles.active : styles.inactive
+                  }
+                >
+                  {room.memberCount > 0 ? "Active" : "Inactive"}
+                </span>
                 <h2 className={styles.roomName}>{room.name}</h2>
                 <div className={styles.bottomGroup}>
                   <p className={styles.members}>{room.memberCount} Users</p>
