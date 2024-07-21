@@ -1,22 +1,11 @@
 package chatrooms
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
-
-type rooms struct {
-	registeredRooms map[string]*Room
-}
-
-func makeEmptyRooms() rooms {
-	return rooms{registeredRooms: make(map[string]*Room)}
-}
-
-var activeRooms = makeEmptyRooms()
 
 var socketUpgrade = websocket.Upgrader{
 	ReadBufferSize:  1024,
@@ -24,26 +13,55 @@ var socketUpgrade = websocket.Upgrader{
 	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-func createAndRegisterRoom(name string) {
-	if _, ok := activeRooms.registeredRooms[name]; ok {
-		return
-	}
-	room := new(Room)
-	room.OpenChatRoom(name)
-	activeRooms.registeredRooms[name] = room
-}
-
-func Join(roomID string, userID string, conn *websocket.Conn) error {
-	if room, ok := activeRooms.registeredRooms[roomID]; ok {
-		mem := new(Member)
-		mem.JoinRoom(userID, room, conn)
-		return nil
-	}
-	return fmt.Errorf("%s does not exist", roomID)
-}
-
 func upgrade(w http.ResponseWriter, r *http.Request) (*websocket.Conn, error) {
 	return socketUpgrade.Upgrade(w, r, nil)
+}
+
+type floorMap map[string]*Room
+
+/*
+Multithreading safe access to current rooms.
+*/
+type safeLobby struct {
+	registeredRooms floorMap
+	process         chan func(floorMap)
+}
+
+func (s *safeLobby) init() {
+	// 125 * 64 = 1kb
+	s.process = make(chan func(floorMap), 125)
+	s.registeredRooms = make(floorMap)
+}
+
+func (s *safeLobby) run() {
+	for runner := range s.process {
+		runner(s.registeredRooms)
+	}
+}
+
+var roomLobby safeLobby
+
+type Nroom struct {
+	Name        string `json:"name"`
+	MemberCount int    `json:"memberCount"`
+}
+
+func ActiveRooms(c *gin.Context) {
+
+	result := make(chan []Nroom)
+	defer close(result)
+
+	arg := func(fm floorMap) {
+		roomacc := make([]Nroom, 0, len(fm))
+		for _, room := range fm {
+			count := len(room.members)
+			roomacc = append(roomacc, Nroom{Name: room.name, MemberCount: count})
+		}
+		result <- roomacc
+	}
+
+	roomLobby.process <- arg
+	c.JSON(200, <-result)
 }
 
 func RoomSetup(c *gin.Context) {
@@ -58,27 +76,30 @@ func RoomSetup(c *gin.Context) {
 	var name string
 	var room string
 	if name, room = c.Query("userID"), c.Query("roomID"); name != "" && room != "" {
-		createAndRegisterRoom(room)
+		success := make(chan int)
 
-		if err = Join(room, name, conn); err != nil {
-			c.AbortWithStatus(http.StatusInternalServerError)
-			return
+		arg := func(fm floorMap) {
+			var chatroom *Room
+			var ok bool
+			if chatroom, ok = fm[room]; !ok {
+				chatroom = new(Room)
+				chatroom.OpenChatRoom(room)
+				fm[room] = chatroom
+			}
+			user := new(Member)
+			user.JoinRoom(name, chatroom, conn)
+			success <- 200
 		}
+
+		roomLobby.process <- arg
+		c.Status(<-success)
 
 	} else {
 		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }
 
-func ActiveRooms(c *gin.Context) {
-	type nroom struct {
-		name        string
-		memberCount int
-	}
-	var roomacc []nroom
-	for _, room := range activeRooms.registeredRooms {
-		count := len(room.members)
-		roomacc = append(roomacc, nroom{name: room.name, memberCount: count})
-	}
-	c.JSON(200, roomacc)
+func init() {
+	roomLobby.init()
+	go roomLobby.run()
 }

@@ -45,7 +45,7 @@ func (m *Member) OpenReciever() {
 		err := m.conn.ReadJSON(arrivingMessage)
 		if err != nil {
 			log.Println(err.Error())
-			continue
+			return
 		}
 
 		m.room.cast <- *arrivingMessage
@@ -61,15 +61,13 @@ func (m *Member) OpenSender() {
 	for {
 		select {
 		case message, ok := <-m.send:
+			// TODO: log errors
 			if m.conn.SetWriteDeadline(time.Now().Add(writeWait)) != nil {
 				return
 			}
 
-			// TODO: log errors
 			if !ok {
-				if m.conn.WriteMessage(websocket.CloseMessage, nil) != nil {
-					return
-				}
+				m.conn.WriteMessage(websocket.CloseMessage, nil)
 				return
 			}
 

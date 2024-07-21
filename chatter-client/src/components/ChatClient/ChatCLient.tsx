@@ -14,7 +14,7 @@ interface ChatCLientProps {
 
 const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
   const port = 8080;
-  const socketUrl = `ws://localhost:${port}/api/chat/join-room?userID=${username}&roomID=${roomID}`;
+  const socketUrl = `ws://localhost:${port}/api/chat/join?userID=${username}&roomID=${roomID}`;
 
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
