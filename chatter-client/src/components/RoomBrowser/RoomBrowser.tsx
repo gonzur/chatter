@@ -31,6 +31,7 @@ const RoomBrowser = (props: RoomBrowserProps) => {
   };
 
   const [query, setQuery] = useState("");
+  const [roomName, setRoomName] = useState("");
 
   useEffect(fetchRooms, []);
 
@@ -56,6 +57,25 @@ const RoomBrowser = (props: RoomBrowserProps) => {
       </div>
       <div className={styles.roomListBorder}>
         <div className={styles.roomList}>
+          <div className={styles.card}>
+            <span className={styles.inactive}>Inactive</span>
+            <input
+              placeholder="Room name..."
+              value={roomName}
+              onChange={(e) => setRoomName(e.target.value)}
+              className={styles.roomNameInput}
+            />
+            <div className={styles.bottomGroup}>
+              <p className={styles.members}>0 Users</p>
+              <button
+                className={styles.joinButton}
+                type="button"
+                onClick={() => transition(roomName)}
+              >
+                Create
+              </button>
+            </div>
+          </div>
           {roomList
             .filter((value) => value.name.includes(query))
             .map((room) => (

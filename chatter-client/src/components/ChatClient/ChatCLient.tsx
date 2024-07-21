@@ -66,6 +66,7 @@ const ChatCLient = ({ username, roomID }: ChatCLientProps) => {
   return (
     <div className={styles.alignment}>
       <div className={styles.view}>
+        <h1>{roomID}</h1>
         <HistoryView username={username} messages={messages} />
         <div className={styles.chatInput}>
           <ChatInput

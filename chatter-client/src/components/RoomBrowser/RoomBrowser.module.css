@@ -83,14 +83,52 @@
   margin-left: 0.25rem;
 }
 
+.inactive {
+  display: flex;
+  line-height: 1em;
+  justify-content: end;
+  margin: 0;
+}
+
+.inactive::after {
+  content: "";
+  border-radius: 50%;
+  background-color: rgb(213, 174, 0);
+  position: relative;
+  top: 0.25em;
+  display: flex;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.25rem;
+}
+
 .roomName {
   display: block;
   word-wrap: break-word;
   text-overflow: ellipsis;
   width: 12rem;
+  margin: 1.25rem 0rem;
   white-space: nowrap;
   overflow: hidden;
   max-height: 2rem;
+}
+
+.roomNameInput {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  width: 12rem;
+  margin: 1.25rem 0rem;
+  margin-bottom: 1.125rem;
+  height: 1.75rem;
+  border: none;
+  outline: none;
+  padding: 0;
+  border-bottom: 0.125rem solid rgba(0, 0, 0, 0.5);
+}
+
+.roomNameInput:focus {
+  border-bottom: 0.125rem solid rgba(0, 0, 0, 0.8);
 }
 
 .card:hover .roomName {
@@ -110,6 +148,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  height: 1.75rem;
 }
 
 .joinButton {
