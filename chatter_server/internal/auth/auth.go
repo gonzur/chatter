@@ -17,6 +17,22 @@ type User struct {
 	Hash     []byte `json:"-" sql:"hash"`
 }
 
+func saltedHash(content []byte, salt []byte) ([]byte, error) {
+	hasher := sha256.New()
+	if _, err := hasher.Write(append(content, salt...)); err != nil {
+		return nil, err
+	}
+	return hasher.Sum(nil), nil
+}
+
+func randomSalt(nBytes int) ([]byte, error) {
+	salt := make([]byte, nBytes)
+	if _, err := rand.Reader.Read(salt); err != nil {
+		return nil, err
+	}
+	return salt, nil
+}
+
 func CreateUser(c *gin.Context) {
 	var user User
 	if c.ShouldBindJSON(&user) != nil {
@@ -24,20 +40,18 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	salt := make([]byte, 16)
-	if _, err := rand.Reader.Read(salt); err != nil {
-		log.Println(err.Error())
+	salt, err := randomSalt(8)
+	if err != nil {
 		c.Status(500)
 		return
 	}
 
-	hasher := sha256.New()
-	if _, err := hasher.Write(append([]byte(user.Password), salt...)); err != nil {
+	hashedPW, err := saltedHash(user.Password, salt)
+	if err != nil {
 		log.Println(err.Error())
 		c.Status(500)
 		return
 	}
-	hashedPW := hasher.Sum(nil)
 
 	cont, cancel := db.DBContext()
 	defer cancel()
@@ -46,10 +60,9 @@ func CreateUser(c *gin.Context) {
 		"INSERT INTO USERS (username, password, hash) VALUES ($1, $2, $3)",
 		user.Username, hashedPW, salt); err != nil {
 		log.Println(err.Error())
-	} else if ct.RowsAffected() != 1 {
-		log.Println("User", user.Username, "Not Inserted")
-		c.Status(500)
-		return
+		if ct.RowsAffected() != 1 {
+			log.Println("User", user.Username, "Not Inserted")
+		}
 	}
 
 	c.Status(200)
@@ -57,7 +70,7 @@ func CreateUser(c *gin.Context) {
 
 type ErrorMessage struct {
 	Message string `json:"message"`
-	Code    uint16 `json:"code"`
+	Code    uint32 `json:"code"`
 }
 
 func Login(c *gin.Context) {
@@ -69,11 +82,11 @@ func Login(c *gin.Context) {
 	}
 
 	storedUser, err := db.QueryRow[User](
-		"SELECT username, password, hash FROM users WHERE username == $1",
+		"SELECT username, password, hash FROM USERS WHERE username == $1",
 		user.Username)
-
 	if err != nil || storedUser == nil {
-		c.JSON(200, ErrorMessage{Message: "Wrong Username/Password", Code: 1})
+		c.Header("WWW-Authenticate", "Basic realm=Application")
+		c.JSON(401, ErrorMessage{Message: "Wrong Username/Password", Code: 1})
 		return
 	}
 
@@ -84,20 +97,12 @@ func Login(c *gin.Context) {
 	}
 
 	if !reflect.DeepEqual(hashedPW, user.Password) {
-		c.JSON(200, ErrorMessage{Message: "Wrong Username/Password", Code: 1})
+		c.Header("WWW-Authenticate", "Basic realm=Application")
+		c.JSON(401, ErrorMessage{Message: "Wrong Username/Password", Code: 1})
 		return
 	}
 
 	sKey := AddSession(user.Username)
-
 	c.SetCookie("session", string(sKey), 0, "/", "localhost", false, true)
 	c.Status(200)
-}
-
-func saltedHash(content []byte, salt []byte) ([]byte, error) {
-	hasher := sha256.New()
-	if _, err := hasher.Write(append(content, salt...)); err != nil {
-		return nil, err
-	}
-	return hasher.Sum(nil), nil
 }
