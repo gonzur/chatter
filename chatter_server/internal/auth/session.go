@@ -20,7 +20,7 @@ func AddSession(username string) []byte {
 	key := newSessionKey()
 
 	sess.Username = username
-	sess.Key = newSessionKey()
+	sess.Key = key
 
 	userSessions.Store(key, sess)
 	return key
