@@ -13,6 +13,7 @@ type Session struct {
 
 var userSessions sync.Map
 
+/* returns base64 encoded []byte representing the session */
 func AddSession(username string) []byte {
 	sess := new(Session)
 
@@ -33,8 +34,8 @@ func FetchSession(key []byte) *Session {
 }
 
 func newSessionKey() []byte {
-	randStr := make([]byte, 196)
-	returnStr := make([]byte, 196)
+	randStr := make([]byte, 24)
+	returnStr := make([]byte, 32)
 	rand.Reader.Read(randStr)
 	base64.StdEncoding.Encode(returnStr, randStr)
 

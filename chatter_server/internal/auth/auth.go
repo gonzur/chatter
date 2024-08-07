@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"log"
+	"net/http"
 	"reflect"
 
 	"github.com/gin-gonic/gin"
@@ -103,6 +104,7 @@ func Login(c *gin.Context) {
 	}
 
 	sKey := AddSession(user.Username)
+	c.SetSameSite(http.SameSiteStrictMode)
 	c.SetCookie("session", string(sKey), 0, "/", "localhost", false, true)
 	c.Status(200)
 }
