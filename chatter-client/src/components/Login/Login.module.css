@@ -1,0 +1,55 @@
+.content {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0px 0px 6px 3px #e1e1e1;
+  width: 20rem;
+  gap: 1rem;
+}
+
+.header {
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.loginInput {
+  height: 3rem;
+  outline: 3px solid #0066ff;
+  border-radius: 10px;
+  padding: 0rem 0.5rem;
+  border: none;
+  background-color: #e1e1e1;
+}
+
+.signIn {
+  margin-top: 1rem;
+  margin-bottom: 0rem;
+  height: 3rem;
+  font-weight: 600;
+  color: #f7f7f7;
+  background-color: #0066ff;
+  border: 3px solid #0066ff;
+  border-radius: 20px;
+  padding: 0.25rem 0.5rem;
+}
+
+.signIn:hover {
+  cursor: pointer;
+  color: #0066ff;
+  background-color: white;
+}
+
+.signIn:active {
+  color: #003f9e;
+  border-color: #003f9e;
+  background-color: white;
+}

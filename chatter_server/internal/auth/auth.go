@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,6 +15,7 @@ import (
 type User struct {
 	ID       string `json:"id" sql:"id"`
 	Username string `json:"username" sql:"username"`
+	// all byte data must be base64 encoded for json to work
 	Password []byte `json:"password" sql:"password"`
 	Hash     []byte `json:"-" sql:"hash"`
 }
@@ -35,9 +37,19 @@ func randomSalt(nBytes int) ([]byte, error) {
 }
 
 func CreateUser(c *gin.Context) {
+	if length, err := strconv.Atoi(c.GetHeader("Content-Length")); err != nil || length > 300 {
+		c.JSON(500, ErrorMessage{Code: 2, Message: "Request too long"})
+		return
+	}
+	// newerr, _ := io.ReadAll(c.Request.Body)
 	var user User
-	if c.ShouldBindJSON(&user) != nil {
-		c.Status(400)
+	if err := c.BindJSON(&user); err != nil {
+		c.String(400, "%s", err.Error())
+		return
+	}
+
+	if len(string(user.Password)) > 32 || len(user.Username) > 256 {
+		c.JSON(500, ErrorMessage{Code: 3, Message: "Username or Password too long."})
 		return
 	}
 
@@ -75,10 +87,20 @@ type ErrorMessage struct {
 }
 
 func Login(c *gin.Context) {
+	if length, err := strconv.Atoi(c.GetHeader("Content-Length")); err != nil || length < 300 {
+		c.JSON(500, ErrorMessage{Code: 2, Message: "Request too long"})
+		return
+	}
+
 	var user User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		log.Println(err.Error())
 		c.Status(500)
+		return
+	}
+
+	if len(string(user.Password)) > 16 || len(user.Username) > 256 {
+		c.JSON(500, ErrorMessage{Code: 3, Message: "Password Must be less than 16 Characters. Username must be less than 256 characters."})
 		return
 	}
 

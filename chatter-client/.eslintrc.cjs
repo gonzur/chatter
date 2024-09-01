@@ -16,6 +16,7 @@ module.exports = {
   rules: {
     "no-restricted-syntax": [0],
     "no-shadow": "off",
+    "react/require-default-props": [0],
     "import/extensions": [
       "error",
       "ignorePackages",

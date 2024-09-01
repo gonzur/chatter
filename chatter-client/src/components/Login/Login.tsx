@@ -1,9 +1,10 @@
 import { apiBaseUrl } from "data/constants";
 import { useState } from "react";
+import styles from "./Login.module.css";
 
 interface LoginProps {
-  onError: () => {};
-  onSuccess: () => {};
+  onError: () => void;
+  onSuccess: () => void;
 }
 
 const Login = (props: LoginProps) => {
@@ -25,29 +26,35 @@ const Login = (props: LoginProps) => {
   };
 
   return (
-    <div className="card">
-      <h2>Login</h2>
-      <label htmlFor="username">
-        Username
+    <div className={styles.content}>
+      <div className={styles.card}>
+        <h1 className={styles.header}>Sign in</h1>
+
         <input
+          className={styles.loginInput}
           id="username"
           type="text"
+          placeholder="Username..."
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-      </label>
-      <label htmlFor="password">
-        Password
+
         <input
+          className={styles.loginInput}
           id="password"
-          type="text"
+          type="password"
+          placeholder="Password..."
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-      </label>
-      <button type="button" onClick={verifyCredentials}>
-        Sign In
-      </button>
+        <button
+          className={styles.signIn}
+          type="button"
+          onClick={verifyCredentials}
+        >
+          Sign In
+        </button>
+      </div>
     </div>
   );
 };
